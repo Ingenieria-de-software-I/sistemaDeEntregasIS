@@ -50,6 +50,17 @@ A continuación, se detalla el propósito de cada script y cómo ejecutarlo.
 ./invitar_alumnos.sh
 ```
 
+### 1.1. `invitar_alumnos_auto.py`
+
+**Propósito**: Versión alternativa que envía las invitaciones leyendo los usuarios desde las respuestas de la encuesta inicial. Para esto, es necesario indicar la URL de la planilla (publicando en formato web la hoja en cuestión, en formato `.csv`) en la constante `SHEET_URL`.
+
+**Funcionamiento interno**: Equivalente al script anterior, pero leyendo los nombres de usuarios con [pandas](https://pandas.pydata.org/), para poder "arreglar" aquellos que hayan enviado la URL completa u algún otro formato poco común.
+
+**Uso**:
+```bash
+python invitar_alumnos_auto.py
+```
+
 ### 2. `crear_repositorios.sh`
 
 **Propósito**: Automatiza la creación de la infraestructura de entregas para un nuevo ejercicio.
