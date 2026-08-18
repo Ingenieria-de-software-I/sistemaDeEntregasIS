@@ -5,7 +5,7 @@ import os
 
 # --- Configuración ---
 ORG = "Ingenieria-de-software-I-alumnos"
-SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQiO_bZmN2YLuvGUdciE2dG2jw_iLtgzMgQcUQ7_8GQLcgcLhZ9oRIs1zu_Jgd0z1vZ7b_OQEB_7nOg/pub?gid=1221205876&single=true&output=csv"
+SHEET_URL = "TU_LINK_PUBLICADO_AQUI"
 COLUMNA_USUARIOS = "Cuenta de GitHub" 
 ARCHIVO_HISTORIAL = "ya_invitados.txt"
 
