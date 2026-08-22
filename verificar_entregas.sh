@@ -3,11 +3,15 @@
 # Configuración de la materia
 ORG="Ingenieria-de-software-I-alumnos"
 ASSIGNMENT_PREFIX="2c2026-codigo-repetido"
-CSV_FILE="grupos.csv"
 
-# Verificar que el CSV exista
-if [ ! -f "$CSV_FILE" ]; then
-    echo "Error: No se encontró el archivo $CSV_FILE"
+echo "🔍 Buscando repositorios con el prefijo '$ASSIGNMENT_PREFIX'..."
+
+# Obtener todos los repositorios de la organización sin límite y filtrar por el prefijo
+REPOS=$(gh repo list "$ORG" --limit 10000 --json name -q '.[].name' | grep "^$ASSIGNMENT_PREFIX")
+
+# Verificar que existan repositorios para analizar
+if [ -z "$REPOS" ]; then
+    echo "Error: No se encontraron repositorios con el prefijo '$ASSIGNMENT_PREFIX'"
     exit 1
 fi
 
@@ -18,15 +22,13 @@ echo "--------------------------------------------------"
 ENTREGADOS=0
 NO_ENTREGADOS=0
 
-# Leer el CSV omitiendo el encabezado
-tail -n +2 "$CSV_FILE" | while IFS=',' read -r GRUPO ALUMNO1 ALUMNO2; do
+# Leer la lista de repositorios (usamos <<< para evitar problemas de variables en subshells)
+while IFS= read -r REPO_NAME; do
     
-    # Limpiar retornos de carro por si el CSV viene de Windows (\r)
-    GRUPO=$(echo "$GRUPO" | tr -d '\r')
-    REPO_NAME="${ASSIGNMENT_PREFIX}-${GRUPO}"
+    # Extraer el nombre del grupo/alumno quitando el prefijo y el guion
+    GRUPO="${REPO_NAME#$ASSIGNMENT_PREFIX-}"
     
     # 1. Consultar la cantidad de commits usando GraphQL
-    # GraphQL es mucho más rápido y directo para obtener solo el conteo
     QUERY="
     query {
       repository(owner: \"$ORG\", name: \"$REPO_NAME\") {
@@ -48,7 +50,7 @@ tail -n +2 "$CSV_FILE" | while IFS=',' read -r GRUPO ALUMNO1 ALUMNO2; do
 
     # 3. Validar estado
     if [ -z "$COMMIT_COUNT" ] || [ "$COMMIT_COUNT" == "null" ]; then
-        echo "⚠️  $GRUPO: Repositorio no encontrado o vacío ($REPO_NAME)."
+        echo "⚠️  $GRUPO: Repositorio vacío o sin rama por defecto."
         continue
     fi
 
@@ -61,7 +63,8 @@ tail -n +2 "$CSV_FILE" | while IFS=',' read -r GRUPO ALUMNO1 ALUMNO2; do
         ((ENTREGADOS++))
     fi
 
-done
+done <<< "$REPOS"
 
 echo "--------------------------------------------------"
 echo "🎉 Verificación finalizada."
+echo "📊 Resumen: $ENTREGADOS entregados, $NO_ENTREGADOS no entregados."
