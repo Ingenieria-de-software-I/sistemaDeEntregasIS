@@ -28,7 +28,7 @@ usuario_alumno2
 ```
 
 ### 2. `grupos.csv`
-Un archivo CSV utilizado para la **creación de equipos, repositorios y verificación de entregas**. Debe contener un encabezado y los usuarios separados por comas.
+Un archivo CSV utilizado para la **creación de equipos y repositorios**. Debe contener un encabezado y los usuarios separados por comas. Es posible generarlo automáticamente desde los resultados de la encuesta de grupos utilizando el script `generar_csv_grupos.py`.
 ```text
 grupo,alumno1,alumno2
 GRUPO01,usuario_alumno1,usuario_alumno2
@@ -101,7 +101,7 @@ python invitar_alumnos_auto.py
 
 ### 5. `descargar_entregas.sh`
 
-**Propósito**: Clona ("pullea") todos los repositorios del ejercicio masivamente a la computadora local.
+**Propósito**: Clona o pullea todos los repositorios del ejercicio masivamente a la computadora local.
 
 **Funcionamiento interno**: Crea un directorio local (`entregas_codigo-repetido`). Si es la primera vez que se ejecuta, hace un `git clone` de cada grupo. Si la carpeta del grupo ya existe, ejecuta un `git pull --quiet` para actualizar únicamente los últimos cambios.
 
