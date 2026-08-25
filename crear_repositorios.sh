@@ -13,7 +13,7 @@ if [ ! -f "$CSV_FILE" ]; then
 fi
 
 # Leer el CSV omitiendo el encabezado
-tail -n +2 "$CSV_FILE" | while IFS=',' read -r GRUPO ALUMNO1 ALUMNO2; do
+tail -n +2 "$CSV_FILE" | while IFS=',' read -r GRUPO ALUMNO1 ALUMNO2 ALUMNO3; do
     echo "--------------------------------------------------"
     echo "🚀 Procesando: $GRUPO"
 
@@ -21,7 +21,7 @@ tail -n +2 "$CSV_FILE" | while IFS=',' read -r GRUPO ALUMNO1 ALUMNO2; do
     gh api -X POST "orgs/$ORG/teams" -f name="$GRUPO" -f privacy="closed" > /dev/null 2>&1
     
     # 2. Agregar los alumnos al equipo
-    for ALUMNO in "$ALUMNO1" "$ALUMNO2"; do
+    for ALUMNO in "$ALUMNO1" "$ALUMNO2" "$ALUMNO3"; do
         if [ -n "$ALUMNO" ]; then
             echo "   -> Agregando a $ALUMNO al equipo $GRUPO..."
             gh api -X PUT "orgs/$ORG/teams/$GRUPO/memberships/$ALUMNO" -f role="member" > /dev/null
